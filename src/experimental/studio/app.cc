@@ -204,8 +204,12 @@ void App::SwitchGraphicsMode(int width, int height,
 }
 
 void App::Recompile() {
-  mj_recompile(model_holder_->spec(), model_holder_->vfs(),
-               model_holder_->model(), model_holder_->data());
+  model_holder_->Recompile();
+  if (!model_holder_->ok()) {
+    SetLoadError(std::string(model_holder_->error()));
+    return;
+  }
+
   renderer_->Init(model());
 
   const int state_size = mj_stateSize(model(), mjSTATE_INTEGRATION);
