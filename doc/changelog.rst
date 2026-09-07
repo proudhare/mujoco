@@ -63,8 +63,19 @@ Samples
 
 Bug fixes
 ^^^^^^^^^
-
 - Rewrote the Plane-Mesh collider to fix bugs and improve performance. Fixes :issue:`3524`.
+
+Models
+^^^^^^
+
+.. youtube:: MNQsV_etq24
+   :aspect: 16:7
+   :align: right
+   :width: 35%
+
+- Added `house of cards <https://github.com/google-deepmind/mujoco/tree/main/model/cards/>`__ example model and three
+  `free-standing arch <https://github.com/google-deepmind/mujoco/tree/main/model/arch/>`__ models:
+  roman, gothic, and hyperbolic. Inspired by `Song et al <https://www.cs.ubc.ca/research/fbf-friction/>`__.
 
 Rendering
 ^^^^^^^^^
