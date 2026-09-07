@@ -640,6 +640,9 @@ MJAPI void mj_objectAcceleration(const mjModel* m, const mjData* d,
 MJAPI mjtNum mj_geomDistance(const mjModel* m, mjData* d, int geom1, int geom2, mjtNum distmax,
                              mjtNum fromto[6]);
 
+// Return 1 if point is inside a site (convex hull for meshes), 0 otherwise.
+MJAPI int mj_insideSite(const mjModel* m, const mjData* d, int siteid, const mjtNum point[3]);
+
 // Extract 6D force:torque given contact id, in the contact frame.
 MJAPI void mj_contactForce(const mjModel* m, const mjData* d, int id, mjtNum result[6]);
 

@@ -9,6 +9,9 @@ General
 ^^^^^^^
 - The :ref:`.mjz <MJZArchives>` encoder now writes the root file as ``model.xml`` in the archive as this is less
   susceptible to breakage due to file renaming.
+- Site geometries can now also be associated with meshes (:ref:`type="mesh"<body-site-type>` with
+  :ref:`mesh="name"<body-site-mesh>`), supporting visualization, the :ref:`insidesite<sensor-insidesite>`
+  sensor, and the new :ref:`mj_insideSite` function.
 - Added support for Python 3.15 (GIL and Free-Threading).
 
 Engine
