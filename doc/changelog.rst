@@ -13,15 +13,17 @@ General
 
 Engine
 ^^^^^^
-- Added a new integrator ``discrete``: the constraint solve and the implicit velocity update merge into one
-  operation, performed in the effective metric :math:`\widehat{M} = M + hD + h^2K`, which incorporates both
-  implicit damping :math:`hD` and implicit position stiffness :math:`h^2 K`.
-  Under this integrator ``mjData.qacc`` is the discrete step map :math:`(v^+ - v)/h`, and joint,
-  tendon and actuator stiffness and damping join the solver's metric, making passive springs and actuator
-  position gains stable at timesteps far beyond the explicit stability limit. The actuator-gain treatment
-  resolves the stiff-servo timestep limitation of :issue:`3443` (analysis contributed by
-  :github:user:`qiayuanl`). See the :ref:`integrator documentation<geIntegrators>` for semantics and current
-  limitations.
+- Added a new integrator ``discrete``: the constraint solve and the implicit velocity update merge into one operation,
+  performed in the effective metric :math:`\widehat{M} = M + hD + h^2K`, which incorporates both implicit damping
+  :math:`hD` and implicit position stiffness :math:`h^2 K`. Under this integrator ``mjData.qacc`` is the discrete step
+  map :math:`(v^+ - v)/h`, and joint, tendon and actuator stiffness and damping join the solver's metric, making passive
+  springs and actuator position gains stable at timesteps far beyond the explicit stability limit. Constraint rows are
+  treated implicitly as well: :at:`solref` spring--dampers are evaluated at the end of the step, so constraints are
+  stable at any ``timeconst``; under this integrator the :ref:`refsafe<option-flag-refsafe>` flag replaces contact and
+  limit rows stiffer than the timestep can resolve by the stiffest zero-restitution row instead of clamping
+  ``timeconst``. The actuator-gain treatment resolves the stiff-servo timestep limitation of :issue:`3443` (analysis
+  contributed by :github:user:`qiayuanl`). See the :ref:`integrator documentation<geIntegrators>` for semantics and
+  current limitations.
 
   .. admonition:: Breaking API changes
      :class: attention

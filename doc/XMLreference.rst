@@ -639,7 +639,9 @@ from its default.
    This flag enables a safety mechanism that prevents instabilities due to solref[0] being too small compared to the
    simulation timestep. Recall that solref[0] is the stiffness of the virtual spring-damper used for constraint
    stabilization. If this setting is enabled, the solver uses max(solref[0], 2*timestep) in place of solref[0]
-   separately for each active constraint.
+   separately for each active constraint. Under the :ref:`discrete<geIntegrators>` integrator, the flag instead
+   replaces contact and limit rows whose spring the timestep cannot resolve (solref[0]*solref[1] < timestep) by the
+   stiffest zero-restitution row for the timestep.
 
 .. _option-flag-sensor:
 
