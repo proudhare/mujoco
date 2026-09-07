@@ -477,18 +477,6 @@ static void mj_addConstraint(const mjModel* m, mjData* d,
         mju_copy(J + adr[nefc+i], jac + i*NV, NV);
       }
     }
-
-    // set J row supernodes; 1: next row has same pattern, 0: different pattern
-
-    // cross-boundary: does previous row have same pattern?
-    if (nefc > 0 && NV == nnz[nefc-1] &&
-        (NV == 0 || mju_compare(ind + adr[nefc], ind + adr[nefc-1], NV))) {
-      d->efc_J_rowsuper[nefc-1] = 1;
-    }
-
-    // within-constraint: consecutive rows always share same pattern
-    mju_fillInt(d->efc_J_rowsuper + nefc, 1, size-1);
-    d->efc_J_rowsuper[nefc+size-1] = 0;
   }
 
   // all rows empty: skip constraint
@@ -2762,7 +2750,7 @@ static int mj_nc(const mjModel* m, mjData* d, int* nnz) {
 
               if (m->flex_interp[f]) {
                 nw = mj_elemBodyWeight(m, d, con->flex[side], con->elem[side],
-                                      con->vert[1-side], con->pos, vid, vweight);
+                                       con->vert[1-side], con->pos, vid, vweight);
               }
             }
 
@@ -3005,8 +2993,7 @@ void mj_makeConstraint(const mjModel* m, mjData* d) {
       }
     }
   } else if (d->nefc > nefc_allocated) {
-    mjERROR("nefc under-allocation: found nefc=%d but allocated only %d",
-            d->nefc, nefc_allocated);
+    mjERROR("nefc under-allocation: found nefc=%d but allocated only %d", d->nefc, nefc_allocated);
   }
 
   // collect memory use statistics
@@ -3018,13 +3005,9 @@ void mj_makeConstraint(const mjModel* m, mjData* d) {
     return;
   }
 
-  // accumulate J row supernodes (reverse cumsum of 0/1 flags set at assembly time)
-  if (mj_isSparse(m) && d->nefc) {
-    for (int r=d->nefc-2; r >= 0; r--) {
-      if (d->efc_J_rowsuper[r]) {
-        d->efc_J_rowsuper[r] += d->efc_J_rowsuper[r+1];
-      }
-    }
+  // compute supernodes of J
+  if (mj_isSparse(m)) {
+    mju_superSparse(d->nefc, d->efc_J_rowsuper, d->efc_J_rownnz, d->efc_J_rowadr, d->efc_J_colind);
   }
 
   // compute regularization; under the discrete integrator this happens at the
